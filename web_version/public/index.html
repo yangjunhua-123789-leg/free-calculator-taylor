@@ -1,0 +1,366 @@
+﻿<!doctype html>
+<html lang="zh-CN" data-theme="dark" data-skin="maid">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>鑷敱璁＄畻鍣?v1.2.0 路 娉板嫆鏋侀檺瑙傛祴寮曟搸</title>
+  <link rel="stylesheet" href="assets/pico.min.css">
+  <link rel="stylesheet" href="assets/katex.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/splash-v3.css">
+</head>
+<body>
+  <div class="splash" id="splash" aria-hidden="true">
+    <div class="splash-scene">
+      <div class="splash-art"></div>
+      <div class="splash-wash"></div>
+      <div class="splash-particles" id="splashParticles"></div>
+      <div class="splash-scan"></div>
+    </div>
+    <div class="splash-boot">
+      <span class="splash-boot-kicker">DEEPSEEK 路 AI ASSISTANT</span>
+      <div class="splash-boot-logo">DeepSeek</div>
+      <div class="splash-boot-welcome">娆㈣繋鏉ュ埌涓撲笟宸ヤ綔妯″紡</div>
+      <div class="splash-boot-en">PROFESSIONAL WORK MODE</div>
+      <div class="splash-term">
+        <span style="--d: 0">&gt; initializing dreams...</span>
+        <span style="--d: 1">&gt; loading local math engine...</span>
+        <span style="--d: 2">&gt; ready<span class="splash-caret">鈻?/span></span>
+      </div>
+    </div>
+    <div class="splash-copy">
+      <h1>鑷敱璁＄畻鍣?/h1>
+      <p>娉板嫆鏋侀檺瑙傛祴寮曟搸 路 鏈湴绂荤嚎璁＄畻</p>
+      <div class="splash-loader"><span></span></div>
+      <small>姝ｅ湪杞藉叆鏈湴鏁板寮曟搸</small>
+    </div>
+    <span class="splash-badge">WHALE-01 // BOOT SEQUENCE</span>
+    <span class="splash-skip">鐐瑰嚮浠绘剰澶?/ Esc 璺宠繃</span>
+    <script>
+      (function () {
+        // 鍏虫帀 WebView2 鐨勬粴鍔ㄤ綅缃仮澶嶏紝閬垮厤涓€鎵撳紑灏卞仠鍦ㄥ崐鎴〉闈?
+        if ("scrollRestoration" in history) {
+          history.scrollRestoration = "manual";
+        }
+        window.scrollTo(0, 0);
+
+        var SKINS = {
+          maid: "maid_whale.png",
+          orca: "orca_whale.png",
+          chibi: "chibi_whale.png"
+        };
+        var skin = localStorage.getItem("freecalc.skin") || "maid";
+        if (!SKINS[skin]) skin = "maid";
+        document.documentElement.dataset.skin = skin;
+        document.documentElement.dataset.mascotFile = SKINS[skin];
+        document.documentElement.style.setProperty(
+          "--mascot-bg",
+          'url("assets/img/' + SKINS[skin] + '")'
+        );
+
+        var duration = parseFloat(localStorage.getItem("freecalc.splash"));
+        if (!isFinite(duration) || duration <= 0) duration = 3;
+        duration = Math.min(3, Math.max(1, duration));
+
+        var splash = document.getElementById("splash");
+        if (splash) {
+          splash.style.setProperty("--splash-dur", duration + "s");
+          splash.dataset.duration = String(duration);
+
+          var host = document.getElementById("splashParticles");
+          if (host) {
+            for (var i = 0; i < 30; i += 1) {
+              var dot = document.createElement("span");
+              dot.style.setProperty("--x", (Math.random() * 100).toFixed(2) + "%");
+              dot.style.setProperty("--d", (2.4 + Math.random() * 2.8).toFixed(2) + "s");
+              dot.style.setProperty("--delay", (-Math.random() * 5).toFixed(2) + "s");
+              dot.style.setProperty("--size", (1 + Math.random() * 2.6).toFixed(1) + "px");
+              host.appendChild(dot);
+            }
+          }
+
+          splash.addEventListener("mousemove", function (event) {
+            var rect = splash.getBoundingClientRect();
+            var mx = (event.clientX - rect.left) / rect.width - 0.5;
+            var my = (event.clientY - rect.top) / rect.height - 0.5;
+            splash.style.setProperty("--mx", mx.toFixed(3));
+            splash.style.setProperty("--my", my.toFixed(3));
+          });
+          splash.addEventListener("mouseleave", function () {
+            splash.style.setProperty("--mx", "0");
+            splash.style.setProperty("--my", "0");
+          });
+        }
+      })();
+    </script>
+  </div>
+
+  <div class="page-art" aria-hidden="true"></div>
+
+  <div class="ambient-orb orb-a" aria-hidden="true"></div>
+  <div class="ambient-orb orb-b" aria-hidden="true"></div>
+
+  <main class="container app-shell">
+    <header class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">
+          <span class="eyebrow-mark"></span>
+          FREE CALCULATOR <i>/</i> v1.2.0
+        </div>
+        <h1>鑷敱璁＄畻鍣?span>娉板嫆鏋侀檺瑙傛祴寮曟搸</span></h1>
+        <p class="hero-lede">
+          鎶婃瀬闄愭媶鎴?1 鍒?10 闃舵嘲鍕掑睍寮€锛岄€愰樁浠ｅ叆浠绘剰瓒嬭繎鐐癸紝
+          鐪嬫竻鍑芥暟濡備綍鏀舵暃銆傛墍鏈夎绠楅兘鍦ㄤ綘鐨勭數鑴戜笂瀹屾垚銆?
+        </p>
+        <div class="hero-badges" aria-label="浜у搧鐗规€?>
+          <span><b></b>鏈湴 SymPy</span>
+          <span><b></b>浠绘剰瓒嬭繎鐐?/span>
+          <span><b></b>KaTeX 绂荤嚎娓叉煋</span>
+        </div>
+        <div class="hero-controls" aria-label="澶栬涓庢洸绾挎晥鏋?>
+          <label for="skinSelect">
+            鐨偆
+            <select id="skinSelect">
+              <option value="maid">娣辨捣濂充粏</option>
+              <option value="orca">铏庨哺閾捐矾</option>
+              <option value="chibi">Q鐗堥哺楸煎</option>
+            </select>
+          </label>
+          <label for="motionSelect">
+            鏇茬嚎鏁堟灉
+            <select id="motionSelect">
+              <option value="animated">鍔ㄦ€?/option>
+              <option value="static">闈欐€?/option>
+            </select>
+          </label>
+          <label for="splashSelect">
+            寮€灞?
+            <select id="splashSelect" title="涓嬫鍚姩鐢熸晥">
+              <option value="1">1 绉?/option>
+              <option value="2">2 绉?/option>
+              <option value="3">3 绉?/option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="orbit orbit-outer"></div>
+        <div class="orbit orbit-inner"></div>
+        <div class="mascot-halo"></div>
+        <img id="heroMascot" src="assets/img/chibi_whale.png" alt="" title="鐐瑰嚮鍒囨崲椴搁奔濞樼毊鑲?>
+        <span class="art-tag">WHALE // ASSIST</span>
+        <span class="art-coord">00.000 / 鈭?/span>
+        <span class="art-hint">鐐瑰嚮澶村儚鍒囨崲鐨偆</span>
+      </div>
+    </header>
+
+    <section class="panel console-card" aria-labelledby="inputTitle">
+      <div class="panel-heading">
+        <div>
+          <span class="section-kicker">01 / INPUT</span>
+          <h2 id="inputTitle">杈撳叆寰呰娴嬪嚱鏁?/h2>
+        </div>
+        <span class="live-chip"><i></i>LOCAL ENGINE</span>
+      </div>
+
+      <form id="calcForm" novalidate>
+        <label for="expression">
+          鍏充簬 x 鐨勮〃杈惧紡涓庤秼杩戠偣
+          <span>sin 路 cos 路 tan 路 exp 路 ln 路 log 路 sqrt 路 abs 路 pi 路 e</span>
+        </label>
+        <div class="input-row">
+          <div class="limit-input">
+            <span class="limit-tag">lim<small>x 鈫?/small></span>
+            <input
+              id="centerInput"
+              class="center-input"
+              type="text"
+              value="0"
+              placeholder="0"
+              aria-label="瓒嬭繎鐐?
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              title="瓒嬭繎鐐癸細甯告暟锛?銆?銆乸i/2銆?2鈥︼級鎴?oo"
+            >
+            <input
+              id="expression"
+              name="expression"
+              type="text"
+              value="(tan(x) - sin(x)) / x**3"
+              placeholder="(tan(x) - sin(x)) / x**3"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              aria-describedby="inputHint"
+            >
+          </div>
+          <button type="submit" id="observeBtn">瑙傛祴鏋侀檺</button>
+        </div>
+
+        <div class="param-row">
+          <label class="order-field" for="directionSelect">
+            鏋侀檺鏂瑰悜
+            <select id="directionSelect" aria-label="鏋侀檺鏂瑰悜">
+              <option value="auto" selected>鑷姩</option>
+              <option value="right">鍙虫瀬闄?/option>
+              <option value="left">宸︽瀬闄?/option>
+              <option value="both">鍙屼晶</option>
+            </select>
+          </label>
+          <label class="order-field" for="orderSelect">
+            灞曞紑闃舵暟
+            <select id="orderSelect" aria-label="灞曞紑闃舵暟">
+              <option value="1">1 闃?/option>
+              <option value="2">2 闃?/option>
+              <option value="3">3 闃?/option>
+              <option value="4">4 闃?/option>
+              <option value="5">5 闃?/option>
+              <option value="6" selected>6 闃?/option>
+              <option value="7">7 闃?/option>
+              <option value="8">8 闃?/option>
+              <option value="9">9 闃?/option>
+              <option value="10">10 闃?/option>
+            </select>
+          </label>
+          <p class="input-hint" id="inputHint">
+            瓒嬭繎鐐瑰彲濉父鏁版垨 <code>oo</code>锛涜緭鍏?<code>log(</code> 浼氳嚜鍔ㄨˉ鍑哄簳鏁颁綅 <code>log(x, 鈻?</code>锛?code>2x</code> 浼氳嚜鍔ㄨˉ涔樺彿銆?
+          </p>
+        </div>
+      </form>
+
+      <div class="example-row" aria-label="绀轰緥琛ㄨ揪寮?>
+        <span>璇曚竴璇?/span>
+        <button type="button" class="example-chip" data-expression="(tan(x) - sin(x)) / x**3">tan 鈭?sin</button>
+        <button type="button" class="example-chip" data-expression="sin(x) / x">sin(x)/x</button>
+        <button type="button" class="example-chip" data-expression="(1 - cos(x)) / x**2">1 鈭?cos</button>
+        <button type="button" class="example-chip" data-expression="(exp(x) - 1 - x) / x**2">exp 鈭?1</button>
+        <button type="button" class="example-chip" data-expression="log(x, 10) / (x - 1)" data-center="1">log 搴曟暟</button>
+        <button type="button" class="example-chip" data-expression="(x**2 - 1) / (x - 1)" data-center="1">瓒嬭繎 1</button>
+        <button type="button" class="example-chip" data-expression="1 / x">鍙戞暎</button>
+        <button type="button" class="example-chip" data-expression="sin(1 / x)">鎸崱</button>
+      </div>
+
+      <div class="engine-row">
+        <p id="apiStatus" class="api-status" data-state="waiting">
+          <span class="status-dot"></span><span id="apiStatusText">姝ｅ湪杩炴帴鏈湴寮曟搸鈥?/span>
+        </p>
+        <p class="privacy-note">绂荤嚎杩愯 路 涓嶄笂浼犺〃杈惧紡</p>
+      </div>
+
+      <div class="error-box" id="errorBox" role="alert" hidden>
+        <span class="error-icon">!</span>
+        <p id="errorText"></p>
+      </div>
+    </section>
+
+    <section class="results" id="resultSection" aria-labelledby="resultTitle" hidden>
+      <div class="result-heading">
+        <div>
+          <span class="section-kicker">02 / OBSERVATION</span>
+          <h2 id="resultTitle">瑙傛祴缁撴灉</h2>
+        </div>
+        <span class="result-time" id="resultTime">鈥?/span>
+      </div>
+
+      <article class="limit-card">
+        <div class="limit-card-head">
+          <span class="limit-label" id="limitLabel">LIMIT FOUND</span>
+          <span class="limit-status" id="limitStatus">鏀舵暃</span>
+        </div>
+        <div class="limit-formula" id="limitFormula" aria-live="polite"></div>
+        <div class="limit-foot">
+          <p id="limitNote">娉板嫆灞曞紑鍦ㄨ秼杩戠偣闄勮繎绋冲畾銆?/p>
+          <span id="limitApprox"></span>
+        </div>
+      </article>
+
+      <div class="overview-grid">
+        <article class="mini-card">
+          <span>鍘熷琛ㄨ揪寮?/span>
+          <code id="resultExpression">鈥?/code>
+        </article>
+        <article class="mini-card">
+          <span>SymPy 瑙ｆ瀽</span>
+          <code id="resultNormalized">鈥?/code>
+        </article>
+        <article class="mini-card">
+          <span>瓒嬭繎鐐?/ 闃舵暟</span>
+          <code id="resultCenter">鈥?/code>
+        </article>
+        <article class="mini-card">
+          <span>璁＄畻寮曟搸</span>
+          <code id="resultEngine">鈥?/code>
+        </article>
+      </div>
+
+      <article class="steps-card">
+        <div class="steps-head">
+          <div>
+            <span class="section-kicker">03 / TAYLOR TRACE</span>
+            <h3>閫愰樁灞曞紑瑙傛祴</h3>
+          </div>
+          <p>姣忛樁鍘婚櫎澶?O 浣欓」鍚庯紝浠ｅ叆 <span class="inline-math" id="stepsCenterText">x = 0</span></p>
+        </div>
+        <div class="table-wrap">
+          <table class="steps-table">
+            <thead>
+              <tr>
+                <th scope="col">闃舵暟</th>
+                <th scope="col">娉板嫆灞曞紑</th>
+                <th scope="col">浠ｅ叆 <span id="centerColLabel">x = 0</span></th>
+                <th scope="col">鏄惁涓洪浂</th>
+              </tr>
+            </thead>
+            <tbody id="stepsBody"></tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="plot-card">
+        <div class="steps-head">
+          <div>
+            <span class="section-kicker">04 / CURVE</span>
+            <h3>瓒嬭繎鐐归檮杩戠殑鍑芥暟鏇茬嚎</h3>
+          </div>
+          <p>鐏拌壊铏氱嚎涓?<span class="inline-math" id="plotCenterLabel">x = 0</span> 路 鏈湴閲囨牱</p>
+        </div>
+        <div class="plot-replay-row">
+          <button type="button" id="replayPlotBtn" class="ghost-btn">鈫?閲嶆挱鏂偣鍔ㄧ敾</button>
+        </div>
+        <div class="plot-wrap">
+          <canvas id="plotCanvas" aria-label="鍑芥暟鍦ㄨ秼杩戠偣闄勮繎鐨勬洸绾?></canvas>
+        </div>
+        <p class="plot-empty" id="plotEmpty" hidden>褰撳墠绐楀彛鍐呮病鏈夊彲鐢ㄧ殑閲囨牱鐐广€?/p>
+      </article>
+
+      <details class="report-preview" open>
+        <summary>棰勮 Markdown 鎺ㄥ鎶ュ憡</summary>
+        <pre id="reportPreview"></pre>
+      </details>
+
+      <div class="result-actions">
+        <button id="downloadBtn" type="button" style="display:none;">馃摜 涓嬭浇鎺ㄥ鎶ュ憡 (.md)</button>
+        <button id="copyLatexBtn" type="button" class="ghost-btn" style="display:none;">猝?澶嶅埗 LaTeX</button>
+        <button id="copyResultBtn" type="button" class="ghost-btn" style="display:none;">猝?澶嶅埗缁撹</button>
+        <button id="copyReportBtn" type="button" class="ghost-btn" style="display:none;">猝?澶嶅埗鎶ュ憡</button>
+        <span id="downloadHint">鎶ュ憡鍖呭惈杈撳叆銆佹瀬闄愮粨璁轰笌瀹屾暣閫愰樁鎺ㄥ銆?/span>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="footer-mark">
+        <img src="assets/img/orca_whale.png" alt="" aria-hidden="true">
+        <span>FREE CALCULATOR <i>路</i> TAYLOR LAB</span>
+      </div>
+      <p>鏈湴璁＄畻 / 鏈湴璧勬簮 / 鏃犻渶缃戠粶 路 Made with Pywebview + SymPy + KaTeX</p>
+    </footer>
+  </main>
+
+  <script src="assets/katex.min.js"></script>
+  <script src="assets/web-bridge.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
+

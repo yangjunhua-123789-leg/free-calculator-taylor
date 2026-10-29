@@ -8,3 +8,12 @@ dist/
 .dsh-meow/
 whale-roles/
 napcat-qr.png
+
+# DSH local test artifacts
+.venv-web/
+_srv.*
+_uv.*
+_v.*
+_cf/
+_*.png
+_*.log
