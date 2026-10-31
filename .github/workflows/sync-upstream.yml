@@ -1,0 +1,55 @@
+name: sync-upstream
+
+# 每 6 小时检查一次原作者的仓库；有更新就同步代码并重建成单文件静态站，
+# GitHub Pages 会自动重新发布 —— 也就是“打开就是最新版本”。
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "tools/build_static.py"
+      - ".github/workflows/sync-upstream.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-upstream
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出本仓库
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 拉取原作者最新代码
+        run: |
+          git remote add upstream https://github.com/52hzRedamancy/free-calculator-taylor.git || true
+          git fetch --depth 1 upstream main
+          git checkout upstream/main -- \
+            index.html assets core app.py README.md requirements.txt LICENSE NOTICE-ARTWORK.md build.bat
+          echo "upstream_sha=$(git rev-parse --short FETCH_HEAD)" >> "$GITHUB_ENV"
+          grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' index.html | head -1 > .upstream-version || true
+          cat .upstream-version 2>/dev/null || true
+
+      - name: 生成单文件静态站
+        run: python3 tools/build_static.py
+
+      - name: 提交并推送
+        run: |
+          git config user.name "calc-sync-bot"
+          git config user.email "calc-sync-bot@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "已是最新，无需提交"
+          else
+            git commit -m "chore(sync): 跟随原作者更新 ${upstream_sha}"
+            git push origin HEAD:main
+          fi
