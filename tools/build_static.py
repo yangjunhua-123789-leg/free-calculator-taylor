@@ -94,13 +94,15 @@ def main() -> int:
 
     OUT_INDEX.parent.mkdir(parents=True, exist_ok=True)
     OUT_INDEX.write_text(html, encoding="utf-8")
-    # Vercel 项目的 Root Directory 是 web_version，这里同步写一份，保证两个站点同版本
-    vercel_index = ROOT / "web_version" / "index.html"
-    vercel_index.parent.mkdir(parents=True, exist_ok=True)
-    vercel_index.write_text(html, encoding="utf-8")
+    # Vercel 项目的 Root Directory 是 web_version、输出目录是 public，两个都写一份，保证三处同版本
+    for rel in ("web_version/index.html", "web_version/public/index.html"):
+        target = ROOT / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(html, encoding="utf-8")
 
     left = re.findall(r'(?:src|href)="(?!data:|https?:|#)([^"]+)"', html)
-    print("已生成 %s、%s（%.1f KB），接口=%s" % (OUT_INDEX, vercel_index, len(html) / 1024, API_BASE))
+    print("已生成 docs/index.html、web_version/index.html、web_version/public/index.html（%.1f KB），接口=%s"
+          % (len(html) / 1024, API_BASE))
     if left:
         print("警告：仍有外链引用：%s" % ", ".join(sorted(set(left))))
     return 0
